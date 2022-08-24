@@ -16,7 +16,7 @@ public extension NetworkProvider {
         }
         urlComps.path = endpoint.path.hasPrefix("/") ? endpoint.path : "/\(endpoint.path)"
         if endpoint.method == .get, let params = endpoint.body as? [String: Any?] {
-            urlComps.queryItems = params.filterNilValue().compactMap { key, value -> URLQueryItem? in
+            urlComps.queryItems = params.compactMapValues { $0 }.compactMap { key, value -> URLQueryItem? in
                 let valueString = "\(value)"
                 if !(value is NSNull), !valueString.isEmpty {
                     return URLQueryItem(name: key, value: valueString)

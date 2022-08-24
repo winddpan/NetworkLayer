@@ -1,5 +1,5 @@
 //
-//  NetworkFormDataBody.swift
+//  FormData.swift
 //  NetworkLayer
 //
 //  Created by PAN on 2022/7/22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class NetworkFormDataBody: BodyConvertible {
+public class FormData: BodyConvertible {
     private var httpBody = NSMutableData()
     private let boundary: String = "Boundary-\(UUID().uuidString)"
     private lazy var boundaryEnd = "--\(boundary)--\r\n".data(using: .utf8)!

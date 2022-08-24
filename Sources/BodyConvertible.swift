@@ -11,9 +11,11 @@ public extension BodyConvertible {
     }
 }
 
-extension Dictionary: BodyConvertible where Key == String, Value == Any? {
+extension Dictionary: BodyConvertible where Key == String {
     public func convertToBodyData() -> Data? {
-        return try? JSONSerialization.data(withJSONObject: filterNilValue(), options: [])
+        var dictionary = self as [String: Any?]
+        dictionary = dictionary.compactMapValues { $0 }
+        return try? JSONSerialization.data(withJSONObject: dictionary, options: [])
     }
 }
 
