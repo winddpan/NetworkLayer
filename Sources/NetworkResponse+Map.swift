@@ -5,7 +5,7 @@ public extension NetworkResponse {
         /// Maps data received from the signal into an Image.
         func mapImage() throws -> UIImage {
             guard let image = UIImage(data: data) else {
-                throw RequestError.decode
+                throw RequestError.decodeFailure
             }
             return image
         }
@@ -22,7 +22,7 @@ public extension NetworkResponse {
             if data.isEmpty, !failsOnEmptyData {
                 return NSNull()
             }
-            throw RequestError.decode
+            throw RequestError.decodeFailure
         }
     }
 
@@ -32,9 +32,9 @@ public extension NetworkResponse {
             if let dict = obj as? [String: Any] {
                 return dict
             }
-            throw RequestError.decode
+            throw RequestError.decodeFailure
         } catch {
-            throw RequestError.decode
+            throw RequestError.decodeFailure
         }
     }
 
@@ -59,13 +59,13 @@ public extension NetworkResponse {
             guard let jsonDictionary = try mapJSON() as? NSDictionary,
                   let string = jsonDictionary.value(forKeyPath: keyPath) as? String
             else {
-                throw RequestError.decode
+                throw RequestError.decodeFailure
             }
             return string
         } else {
             // Key path was not provided, parse entire response as string
             guard let string = String(data: data, encoding: .utf8) else {
-                throw RequestError.decode
+                throw RequestError.decodeFailure
             }
             return string
         }
@@ -86,7 +86,7 @@ public extension NetworkResponse {
         keyPathCheck: if let keyPath = keyPath {
             guard let jsonObject = (try mapJSON(failsOnEmptyData: failsOnEmptyData) as? NSDictionary)?.value(forKeyPath: keyPath) else {
                 if failsOnEmptyData {
-                    throw RequestError.decode
+                    throw RequestError.decodeFailure
                 } else {
                     jsonData = data
                     break keyPathCheck
@@ -101,7 +101,7 @@ public extension NetworkResponse {
                 if let data = try serializeToData(wrappedJsonObject) {
                     wrappedJsonData = data
                 } else {
-                    throw RequestError.decode
+                    throw RequestError.decodeFailure
                 }
                 return try decoder.decode(DecodableWrapper<D>.self, from: wrappedJsonData).value
             }

@@ -15,13 +15,13 @@ extension Dictionary: BodyConvertible where Key == String {
     public func convertToBodyData() -> Data? {
         var dictionary = self as [String: Any?]
         dictionary = dictionary.compactMapValues { $0 }
-        return try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+        return try? JSONSerialization.data(withJSONObject: dictionary, options: [.sortedKeys])
     }
 }
 
 extension Array: BodyConvertible {
     public func convertToBodyData() -> Data? {
-        return try? JSONSerialization.data(withJSONObject: self, options: [])
+        return try? JSONSerialization.data(withJSONObject: self, options: [.sortedKeys])
     }
 }
 

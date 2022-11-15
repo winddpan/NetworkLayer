@@ -14,12 +14,18 @@ public extension Endpoint {
 }
 
 public extension Endpoint {
-    static func provider(plugins: [NetworkPlugin] = []) -> NetworkProvider<Self> {
-        return NetworkProvider<Self>(plugins: plugins)
+    static func provider(maxAge: NetworkMaxAge = .never, plugins: [NetworkPlugin] = []) -> NetworkProvider<Self> {
+        return NetworkProvider<Self>(maxAge: maxAge, plugins: plugins)
     }
 
     @discardableResult
     static func request(_ endpoint: Self) async throws -> NetworkResponse {
         return try await provider().request(endpoint)
+    }
+}
+
+public extension Endpoint {
+    func removeCache() {
+        NetworkLayerConfig.default.cache.remove(for: self)
     }
 }

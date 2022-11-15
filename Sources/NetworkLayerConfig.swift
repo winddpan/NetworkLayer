@@ -5,6 +5,8 @@ public class NetworkLayerConfig {
 
     public var globalPlugins: [NetworkPlugin] = []
 
+    public var cache: NetworkCacheProtocol = NetworkDefaultCache()
+
     public var urlSessionConfiguration: URLSessionConfiguration = .default {
         didSet {
             NetworkLayerSession.shared.renewSession()
