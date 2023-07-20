@@ -24,11 +24,11 @@ public struct TypedEndpoint<ModelType: Decodable>: Endpoint {
     }
 }
 
-public extension NetworkProvider {
+public extension TypedEndpoint {
     @discardableResult
-    func requestModel<M>(_ endpoint: T) async throws -> M where T == TypedEndpoint<M> {
-        let response = try await request(endpoint)
-        let model = try response.map(M.self, atKeyPath: endpoint.modelKeyPath)
+    func request(in provider: NetworkProvider<Self> = .init(maxAge: .never)) async throws -> ModelType {
+        let response = try await provider.request(self)
+        let model = try response.map(ModelType.self, atKeyPath: modelKeyPath)
         return model
     }
 }

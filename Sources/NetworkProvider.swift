@@ -5,7 +5,7 @@ public struct NetworkProvider<T: Endpoint> {
     public let maxAge: NetworkMaxAge
     public let plugins: [NetworkPlugin]
 
-    init(maxAge: NetworkMaxAge, plugins: [NetworkPlugin] = []) {
+    public init(maxAge: NetworkMaxAge, plugins: [NetworkPlugin] = []) {
         self.maxAge = maxAge
         self.plugins = plugins
     }
@@ -61,8 +61,7 @@ public extension NetworkProvider {
         var sessionRequestRawData: Data?
         // Sample data
         if NetworkLayerConfig.default.shouldReturnSampleData?(endpoint) == true || ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1",
-           let sampleData = sampleData
-        {
+           let sampleData = sampleData {
             sessionResult = try await sessionWithSampleData(url: _url, data: sampleData, endpoint: endpoint)
         }
         // Cache data
