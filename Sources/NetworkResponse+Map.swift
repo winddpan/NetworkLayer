@@ -1,4 +1,7 @@
 import Foundation
+#if os(iOS)
+    import UIKit
+#endif
 
 public extension NetworkResponse {
     #if os(iOS)
@@ -84,7 +87,7 @@ public extension NetworkResponse {
         }
         let jsonData: Data
         keyPathCheck: if let keyPath = keyPath {
-            guard let jsonObject = (try mapJSON(failsOnEmptyData: failsOnEmptyData) as? NSDictionary)?.value(forKeyPath: keyPath) else {
+            guard let jsonObject = try (mapJSON(failsOnEmptyData: failsOnEmptyData) as? NSDictionary)?.value(forKeyPath: keyPath) else {
                 if failsOnEmptyData {
                     throw RequestError.decodeFailure
                 } else {
